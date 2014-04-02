@@ -15,3 +15,12 @@ Route::get('/', function()
 {
 	return View::make('hello');
 });
+
+Route::get('phones/{company}/{model}', function($company, $model)
+{
+    $input = compact('company', 'model');
+    $phone = new Phone($input);
+    $phone->save();
+
+    return $phone;
+});
