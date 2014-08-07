@@ -79,3 +79,29 @@ App::down(function()
 */
 
 require app_path().'/filters.php';
+
+//
+// Option #1: Adding certain rules to the validator
+// Does not give access to the $translator or $messages
+//
+Validator::extend('foo_bar', function($attribute, $value, $parameters)
+{
+    return ($attribute == 'foo' && $value == 'bar');
+});
+
+//
+// Option #2: Extending the Validator
+// Gives access to $translator and $messages
+//
+class CustomValidator extends Felixkiss\UniqueWithValidator\ValidatorExtension
+{
+    public function validateOnlyApple($attribute, $value, $parameters)
+    {
+        return ($attribute == 'company' && $value == 'apple');
+    }
+}
+
+Validator::resolver(function($translator, $data, $rules, $messages)
+{
+    return new CustomValidator($translator, $data, $rules, $messages);
+});
